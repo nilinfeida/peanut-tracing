@@ -7,6 +7,7 @@
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             title="点击上传头像"
+            accept=".bmp,.jpeg,.jpg,.gif,.png,"
         >
           <img v-if="form.avatarUrl" :src="form.avatarUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -47,8 +48,8 @@ export default {
   },
   created() {
     this.getUser().then(res => {
-      // console.log(res)
       this.form = res
+      this.form.password=null
     })
   },
   methods: {
@@ -58,6 +59,7 @@ export default {
     save() {
       this.request.post("/user", this.form).then(res => {
         if (res.code === '200') {
+          // console.log(res)
           this.$message.success("保存成功")
 
           // 触发父级更新User的方法

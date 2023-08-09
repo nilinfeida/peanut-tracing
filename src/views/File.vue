@@ -40,7 +40,7 @@
       </el-table-column>
       <el-table-column prop="type" label="文件类型" width="180">
       </el-table-column>
-      <el-table-column prop="size" label="文件大小" width="180">
+      <el-table-column prop="size" label="文件大小(kb)" width="180">
       </el-table-column>
       <el-table-column prop="createTime" label="上传时间" >
       </el-table-column>

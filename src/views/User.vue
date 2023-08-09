@@ -281,7 +281,7 @@ export default {
           res=res.data
           this.dialogFormVisible = true
           this.form=res
-          // this.form.password=""
+          this.form.password=null
         }else{alert(res.message)}
       })
     },handleSizeChange(val) {
