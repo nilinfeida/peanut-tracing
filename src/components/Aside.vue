@@ -9,21 +9,23 @@
         <img src="../assets/logo.png" alt="" style="width: 20px;position: relative;top: 5px;margin-right: 5px">
         <b style="color: white;font-size: 20px" v-show="logoTextShow">溯源管理</b>
       </div>
-      <el-menu-item index="/">
+      <el-menu-item index="/manage/home">
         <i class="el-icon-s-home"></i><span slot="title">主页</span>
       </el-menu-item>
 
       <div v-for="item in menus" :key="item.menuId">
         <div v-if="item.path">
-          <el-menu-item :index="item.path">
+          <el-menu-item :index="'/manage'+item.path">
             <i :class="item.icon"></i>
             <span slot="title">{{ item.name }}</span>
           </el-menu-item>
         </div>
       </div>
 
-      <el-menu-item index="/test">
-        <i class="el-icon-setting"></i><span slot="title">测试</span>
+      <el-menu-item @click="toSearch">
+        <i class="el-icon-location-information"></i>
+        <span slot="title">溯源查询</span>
+
       </el-menu-item>
     </el-menu>
 
@@ -41,6 +43,15 @@ export default {
     isCollapse:Boolean,
     logoTextShow:Boolean
   },
+  methods:{
+    toSearch(){
+      const routeUrl = this.$router.resolve({
+        path: "/search"
+      });
+      window.open(routeUrl.href, "_blank");
+
+    }
+  }
 
 }
 </script>

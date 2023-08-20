@@ -6,6 +6,7 @@
             :action="'http://' + serverIp +':9090/file/upload'"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
             title="点击上传头像"
             accept=".bmp,.jpeg,.jpg,.gif,.png,"
         >
@@ -78,6 +79,14 @@ export default {
     },
     handleAvatarSuccess(res) {
       this.form.avatarUrl = res
+    },
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isLt2M;
     }
   }
 }
@@ -101,14 +110,14 @@ export default {
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 138px;
-  height: 138px;
-  line-height: 138px;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
   text-align: center;
 }
 .avatar {
-  width: 138px;
-  height: 138px;
+  width: 178px;
+  height: 178px;
   display: block;
 }
 </style>

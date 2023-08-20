@@ -10,6 +10,7 @@
     <!--新增删除-->
     <div style="margin: 0px 0 0 0;" >
       <el-upload :action="'http://' + serverIp + ':9090/file/upload'" :show-file-list="false"
+                 :before-upload="beforeUpload"
                  :on-success="handleFileUploadSuccess" style="display: inline-block">
         <el-button type="primary" icon="el-icon-upload2" round >文件上传</el-button>
       </el-upload>
@@ -44,8 +45,9 @@
       </el-table-column>
       <el-table-column prop="createTime" label="上传时间" >
       </el-table-column>
-      <el-table-column  label="操作" width="100">
+      <el-table-column  label="操作" width="160">
         <template slot-scope="scope" >
+          <el-button type="primary" @click="preview(scope.row.url)" plain >预览</el-button>
           <el-button type="primary" icon="el-icon-download" circle title="下载" @click="download(scope.row.url)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle title="删除" @click="deleteFile(scope.row)"></el-button>
         </template>
@@ -71,6 +73,7 @@
 
 <script>
 import {serverIp} from "../../public/config";
+import { Base64 } from 'js-base64';
 
 export default {
   name: "File",
@@ -165,7 +168,17 @@ export default {
 
       })
     },
+    preview(url) {
+      window.open('http://127.0.0.1:8012//onlinePreview?url=' + encodeURIComponent(Base64.encode(url)))
+    },
+    beforeUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 100;
 
+      if (!isLt2M) {
+        this.$message.error('上传文件大小不能超过 100MB!');
+      }
+      return isLt2M;
+    }
   },
   created() {
     //请求分页查询数据

@@ -6,26 +6,26 @@ import store from "@/store";
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: '主页导航',
-  //   component: HomeView,
-  //   redirect:"/home",
-  //   children:[
-  //     {path:'home',name:'主页',component:()=>import('../views/Home.vue')},
-  //     {path:'user',name:'用户管理',component:()=>import('../views/User.vue')},
-  //     {path:'test',name:'测试',component:()=>import('../components/HelloWorld.vue')},
-  //     {path:'file',name:"文件管理",component:()=>import('../views/File.vue')},
-  //     {path: 'person',name:'个人信息',component:()=>import('../views/Person.vue')},
-  //     {path: 'password',name:'修改密码',component:()=>import('../views/Password.vue')},
-  //     {path: 'role',name:'角色管理',component:()=>import('../views/Role.vue')},
-  //   ]
-  // },
+  {
+    path: '/',
+    name: '溯源主页',
+    redirect:'/search'
+  },
   {
     path: '/login',
     name: '登录',
     component: ()=>import('../views/Login'),
-  }
+  },
+  { path: '/search',
+    name: '溯源查询',
+    component:()=>import('../views/front/Search.vue'),
+    children:[
+      {path:'product',name:'产品溯源',component:()=>import('../views/front/TraceProduct')},
+      {path:'plant',name:'种植溯源',component:()=>import('../views/front/TracePlant')},
+      {path:'process',name:'加工溯源',component:()=>import('../views/front/TraceProcess')},
+      {path:'logistics',name:'物流溯源',component:()=>import('../views/front/TraceLogistics')},
+      {path:'sale',name:'销售溯源',component:()=>import('../views/front/TraceSale')},
+    ]},
 ]
 
 const router = new VueRouter({
@@ -57,11 +57,10 @@ export const setRoutes = () => {
     const currentRouteNames = router.getRoutes().map(v => v.name)
     if (!currentRouteNames.includes('主页导航')) {
       // 拼装动态路由
-      const manageRoute = { path: '/', name: '主页导航', component: () => import('../views/HomeView.vue'), redirect: "/home", children: [
+      const manageRoute = { path: '/manage', name: '主页导航', component: () => import('../views/HomeView.vue'), redirect: "/manage/home", children: [
           { path: 'home', name: '主页',component: () => import('../views/Home.vue')},
           { path: 'person', name: '个人信息', component: () => import('../views/Person.vue')},
           { path: 'password', name: '修改密码', component: () => import('../views/Password.vue')},
-          {path: 'test', name: '测试',component:()=>import('../components/HelloWorld.vue')},
         ] }
       const menus = JSON.parse(storeMenus)
       menus.forEach(item => {
@@ -82,7 +81,7 @@ setRoutes()
 router.beforeEach((to, from, next) => {
   localStorage.setItem("currentPathName", to.name)  // 设置当前的路由名称
   store.commit("setPath")
-  if(to.path==='/login'){
+  if(to.path==='/login'||to.path.indexOf("search")!=-1){
     return next()
   }
   const CurUser = localStorage.getItem("pt-user")
